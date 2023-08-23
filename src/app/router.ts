@@ -5,7 +5,7 @@ import { createTaskController } from './controller'
 const router = express.Router()
 
 router.get('/hello', (req, res) => {
-  res.send('hello world')
+  res.status(200).json({ message: 'Hello world!' })
 })
 
 router.post('/tasks', createTaskController)
