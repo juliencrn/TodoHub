@@ -20,25 +20,44 @@ describe('Test example', () => {
     app = createServer({ taskRepository })
   })
 
-  test('GET /hello', done => {
+  test('GET /hello', () => {
     const payload = { message: 'Hello world!' }
-    request(app)
+    return request(app)
       .get('/hello')
       .expect('content-type', /json/)
-      .expect(200, payload, done)
+      .expect(200, payload)
   })
 
-  describe('/tasks', () => {
-    test('GET /:id', async () => {
-      const res = await request(app).get(`/tasks/${defaultTask.id}`)
-      const task = res.body.task
+  test('GET /tasks/:id', async () => {
+    const res = await request(app)
+      .get(`/tasks/${defaultTask.id}`)
+      .expect('content-type', /json/)
+      .expect(200)
+    const task = res.body.task
 
-      expect(res.headers['content-type']).toMatch(/json/)
-      expect(res.status).toEqual(200)
-      expect(task.id).toEqual(defaultTask.id)
-      expect(task.completed).toEqual(defaultTask.completed)
-      expect(task.title).toEqual(defaultTask.title)
-      expect(task.createdAt).toEqual(defaultTask.createdAt.toISOString())
-    })
+    expect(task.id).toEqual(defaultTask.id)
+    expect(task.completed).toEqual(defaultTask.completed)
+    expect(task.title).toEqual(defaultTask.title)
+    expect(task.createdAt).toEqual(defaultTask.createdAt.toISOString())
+  })
+
+  test('GET /tasks', async () => {
+    const res = await request(app)
+      .get(`/tasks`)
+      .expect('content-type', /json/)
+      .expect(200)
+
+    expect(res.body.tasks.length).toBe(1)
+  })
+
+  test('POST /tasks', async () => {
+    const res = await request(app)
+      .post('/tasks')
+      .send({ title: 'new todo' })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+
+    expect(res.body.task.title).toBe('new todo')
   })
 })
