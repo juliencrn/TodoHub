@@ -35,14 +35,14 @@ const createNewTask = (dto: ValidatedCreateDto): Task => {
   return newTask
 }
 
-export const createTask =
-  (storage: TaskRepository): CreateTask =>
+export const createTaskService =
+  (taskRepository: TaskRepository): CreateTask =>
   dto => {
     return pipe(
       dto,
       validateCreateTaskDto,
       E.map(createNewTask),
       TE.fromEither,
-      TE.chain(task => storage.create(task)),
+      TE.chain(task => taskRepository.create(task)),
     )
   }

@@ -45,6 +45,8 @@ export type DeleteAllTasks = () => TE.TaskEither<string, true>
 // Repository needed
 
 export type TaskRepository = {
-  get: (id: string) => TE.TaskEither<string, Task>
+  // TODO: use TaskId instead of `string` or not?
+  getById: (id: string) => TE.TaskEither<string, Task>
+  getAll: () => TE.TaskEither<string, Task[]>
   create: (task: Task) => TE.TaskEither<string, Task>
 }
