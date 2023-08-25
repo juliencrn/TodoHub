@@ -4,7 +4,11 @@ import { pipe } from 'fp-ts/lib/function'
 import * as TE from 'fp-ts/lib/TaskEither'
 import { z } from 'zod'
 
-import { createTaskService } from '~/domain/tasks/task.service'
+import {
+  createTaskService,
+  getTaskService,
+  queryTasksService,
+} from '~/domain/tasks/task.service'
 import { createTaskDtoSchema, TaskRepository } from '~/domain/tasks/types'
 import { handleTaskEitherResponse, parseZodToEither } from '~/shared/helpers'
 
@@ -34,7 +38,7 @@ export const getTaskController =
       parsed,
       E.chain(parsed => E.of(parsed.id)),
       TE.fromEither,
-      TE.chain(taskRepository.getById),
+      TE.chain(getTaskService(taskRepository)),
       TE.chain(task => TE.of({ task })),
       handleTaskEitherResponse(),
     )()
@@ -46,7 +50,7 @@ export const getAllTasksController =
   (taskRepository: TaskRepository): RequestHandler =>
   async (_req, res) => {
     const response = await pipe(
-      taskRepository.getAll(),
+      queryTasksService(taskRepository)(),
       TE.chain(tasks => TE.of({ tasks })),
       handleTaskEitherResponse(),
     )()

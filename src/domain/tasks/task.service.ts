@@ -9,6 +9,8 @@ import { parseZodToEither } from '~/shared/helpers'
 import {
   CreateTask,
   CreateTaskDto,
+  GetTask,
+  QueryTasks,
   String50,
   Task,
   TaskId,
@@ -25,15 +27,12 @@ const validateCreateTaskDto = (dto: CreateTaskDto) => {
   )
 }
 
-const createNewTask = (dto: ValidatedCreateDto): Task => {
-  const newTask: Task = {
-    id: uuid() as TaskId,
-    title: dto.title,
-    createdAt: new Date(),
-    completed: false,
-  }
-  return newTask
-}
+const createNewTask = (dto: ValidatedCreateDto): Task => ({
+  id: uuid() as TaskId,
+  title: dto.title,
+  createdAt: new Date(),
+  completed: false,
+})
 
 export const createTaskService =
   (taskRepository: TaskRepository): CreateTask =>
@@ -46,3 +45,11 @@ export const createTaskService =
       TE.chain(task => taskRepository.create(task)),
     )
   }
+
+export const getTaskService = (taskRepository: TaskRepository): GetTask =>
+  taskRepository.getById
+
+// TODO: Impl filters (getFilteredTasks)
+// TODO: Impl pagination (getPagination)
+export const queryTasksService = (taskRepository: TaskRepository): QueryTasks =>
+  taskRepository.getAll

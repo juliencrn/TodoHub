@@ -34,13 +34,17 @@ export const updateTaskDtoSchema = z.object({
 
 export type CreateTask = (dto: CreateTaskDto) => TE.TaskEither<string, Task>
 export type UpdateTask = (
-  id: TaskId,
+  // TODO: use TaskId instead of `string` or not?
+  id: string,
   change: Partial<UpdateTaskDto>,
 ) => TE.TaskEither<string, Task>
-export type GetTask = (id: TaskId) => TE.TaskEither<string, Task>
-export type DeleteTask = (id: TaskId) => TE.TaskEither<string, true>
-export type GetAllTasks = () => TE.TaskEither<string, Task>
-export type DeleteAllTasks = () => TE.TaskEither<string, true>
+// TODO: use TaskId instead of `string` or not?
+export type GetTask = (id: string) => TE.TaskEither<string, Task>
+// TODO: use TaskId instead of `string` or not?
+export type DeleteTask = (id: string) => TE.TaskEither<string, true>
+
+// TODO: Contains getFilteredTasks and getPagination
+export type QueryTasks = () => TE.TaskEither<string, Task[]>
 
 // Repository needed
 
