@@ -9,7 +9,7 @@
     "dev": "nodemon src/index.ts",
     "lint": "eslint --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
-    "test": "jest"
+    "test": "tsc --noEmit && jest --detectOpenHandles"
   },
   "keywords": [],
   "author": "",

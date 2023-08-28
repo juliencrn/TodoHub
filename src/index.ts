@@ -1,7 +1,7 @@
 import { createServer } from './app/server'
-import { TaskRepository } from './infra/task.repository'
+import { createTaskRepository } from './infra/task.repository'
 
-const taskRepository = new TaskRepository()
+const taskRepository = createTaskRepository()
 
 const app = createServer({ taskRepository })
 

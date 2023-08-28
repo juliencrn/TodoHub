@@ -1,13 +1,14 @@
 import express from 'express'
 
-import { TaskRepository } from '~/domain/tasks/types'
+import type { TaskRepository } from '~/domain/tasks/repository'
 
-import { sayHelloController } from './hello.controller'
 import {
+  completeTaskController,
   createTaskController,
+  deleteTaskController,
   getAllTasksController,
   getTaskController,
-} from './task.controller'
+} from './task/controller'
 
 type AppDependencies = {
   taskRepository: TaskRepository
@@ -19,8 +20,11 @@ export const createServer = ({ taskRepository }: AppDependencies) => {
   app.use(express.json())
 
   // Routes
-  app.route('/hello').get(sayHelloController)
-  app.route('/tasks/:id').get(getTaskController(taskRepository))
+  app.route('/tasks/:id/complete').put(completeTaskController(taskRepository))
+  app
+    .route('/tasks/:id')
+    .get(getTaskController(taskRepository))
+    .delete(deleteTaskController(taskRepository))
   app
     .route('/tasks')
     .get(getAllTasksController(taskRepository))
